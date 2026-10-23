@@ -5,39 +5,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Unzip Project
-      run: unzip -q DigroVPN_Clean.zip
-      
-    - name: Fix Configs and Download Correct Lib
-      run: |
-        # Убираем пути Termux
-        echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" > gradle.properties
-        echo "android.useAndroidX=true" >> gradle.properties
-        echo "android.nonTransitiveRClass=true" >> gradle.properties
-        
-        # Качаем ПРАВИЛЬНУЮ библиотеку, под которую написан твой код
-        mkdir -p app/libs
-        wget -q -O app/libs/libv2ray.aar https://github.com/dev7dev/V2ray-Android/raw/main/v2ray/libs/libv2ray.aar
-        
-        # Проверяем, что скачался архив
-        file app/libs/libv2ray.aar
-        
-        # Подключаем её
-        sed -i "s|implementation 'com.github.dev7dev:V2ray-Android:1.0.0'|implementation files('libs/libv2ray.aar')|" app/build.gradle
-        
+      run: unzip -q DigroVPN_Final.zip
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-        
+
     - name: Make gradlew executable
       run: chmod +x gradlew
-      
+
     - name: Build with Gradle
       run: ./gradlew assembleDebug --no-daemon
-      
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
