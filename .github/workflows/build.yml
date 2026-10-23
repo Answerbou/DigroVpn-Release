@@ -9,21 +9,21 @@ jobs:
     - name: Unzip Project
       run: unzip -q DigroVPN_Clean.zip
       
-    - name: Fix Configs and Libs
+    - name: Fix Configs and Download Correct Lib
       run: |
         # Убираем пути Termux
         echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" > gradle.properties
         echo "android.useAndroidX=true" >> gradle.properties
         echo "android.nonTransitiveRClass=true" >> gradle.properties
         
-        # Качаем проверенную библиотеку напрямую из репозитория v2rayNG
+        # Качаем ПРАВИЛЬНУЮ библиотеку, под которую написан твой код
         mkdir -p app/libs
-        wget -q -O app/libs/libv2ray.aar https://github.com/2dust/v2rayNG/raw/09d854dc784365e5499e444aff065055adcc5105/V2rayNG/app/libs/libv2ray.aar
+        wget -q -O app/libs/libv2ray.aar https://github.com/dev7dev/V2ray-Android/raw/main/v2ray/libs/libv2ray.aar
         
-        # Проверяем, что скачался именно архив (Zip archive data)
+        # Проверяем, что скачался архив
         file app/libs/libv2ray.aar
         
-        # Подключаем локальный файл
+        # Подключаем её
         sed -i "s|implementation 'com.github.dev7dev:V2ray-Android:1.0.0'|implementation files('libs/libv2ray.aar')|" app/build.gradle
         
     - name: Set up JDK 17
