@@ -9,10 +9,10 @@ jobs:
     - name: Unzip Project
       run: unzip -q DigroVPN_Clean.zip
       
-    - name: Download and Fix V2Ray Library
+    - name: Download V2Ray Library
       run: |
         mkdir -p app/libs
-        wget -q -O app/libs/libv2ray.aar https://github.com/2dust/v2rayNG/raw/master/V2rayNG/app/libs/libv2ray.aar
+        wget -q -O app/libs/libv2ray.aar https://sourceforge.net/projects/androidlibxraylite.mirror/files/v26.9.30/libv2ray.aar/download
         sed -i "s|implementation 'com.github.dev7dev:V2ray-Android:1.0.0'|implementation files('libs/libv2ray.aar')|" app/build.gradle
         
     - name: Set up JDK 17
