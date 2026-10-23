@@ -16,11 +16,11 @@ jobs:
         echo "android.useAndroidX=true" >> gradle.properties
         echo "android.nonTransitiveRClass=true" >> gradle.properties
         
-        # Качаем ОРИГИНАЛЬНУЮ библиотеку прямо с GitHub (raw)
+        # Качаем проверенную библиотеку напрямую из репозитория v2rayNG
         mkdir -p app/libs
-        wget -q -O app/libs/libv2ray.aar https://raw.githubusercontent.com/dev7dev/V2ray-Android/main/v2ray/libs/libv2ray.aar
+        wget -q -O app/libs/libv2ray.aar https://github.com/2dust/v2rayNG/raw/09d854dc784365e5499e444aff065055adcc5105/V2rayNG/app/libs/libv2ray.aar
         
-        # Проверяем, что скачался бинарник (должно быть написано Zip archive data)
+        # Проверяем, что скачался именно архив (Zip archive data)
         file app/libs/libv2ray.aar
         
         # Подключаем локальный файл
