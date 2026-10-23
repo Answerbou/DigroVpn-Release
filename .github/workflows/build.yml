@@ -11,16 +11,19 @@ jobs:
       
     - name: Fix Configs and Libs
       run: |
-        # Полностью перезаписываем файл настроек, выкидывая пути Termux
+        # Убираем пути Termux
         echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" > gradle.properties
         echo "android.useAndroidX=true" >> gradle.properties
         echo "android.nonTransitiveRClass=true" >> gradle.properties
         
-        # Качаем библиотеку Xray
+        # Качаем ОРИГИНАЛЬНУЮ библиотеку прямо с GitHub (raw)
         mkdir -p app/libs
-        wget -q -O app/libs/libv2ray.aar https://sourceforge.net/projects/androidlibxraylite.mirror/files/v26.9.30/libv2ray.aar/download
+        wget -q -O app/libs/libv2ray.aar https://raw.githubusercontent.com/dev7dev/V2ray-Android/main/v2ray/libs/libv2ray.aar
         
-        # Меняем зависимость в Gradle
+        # Проверяем, что скачался бинарник (должно быть написано Zip archive data)
+        file app/libs/libv2ray.aar
+        
+        # Подключаем локальный файл
         sed -i "s|implementation 'com.github.dev7dev:V2ray-Android:1.0.0'|implementation files('libs/libv2ray.aar')|" app/build.gradle
         
     - name: Set up JDK 17
