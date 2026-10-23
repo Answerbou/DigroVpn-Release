@@ -6,15 +6,21 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Unzip and Fix Configs
+    - name: Unzip Project
+      run: unzip -q DigroVPN_Clean.zip
+      
+    - name: Fix Configs and Libs
       run: |
-        unzip -q DigroVPN_Clean.zip
-        # Удаляем настройку aapt2 от Termux, чтобы сервер не искал файлы с телефона
-        sed -i '/android.aapt2FromMavenOverride/d' gradle.properties
-        # Скачиваем библиотеку
+        # Полностью перезаписываем файл настроек, выкидывая пути Termux
+        echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" > gradle.properties
+        echo "android.useAndroidX=true" >> gradle.properties
+        echo "android.nonTransitiveRClass=true" >> gradle.properties
+        
+        # Качаем библиотеку Xray
         mkdir -p app/libs
         wget -q -O app/libs/libv2ray.aar https://sourceforge.net/projects/androidlibxraylite.mirror/files/v26.9.30/libv2ray.aar/download
-        # Подключаем библиотеку в Gradle
+        
+        # Меняем зависимость в Gradle
         sed -i "s|implementation 'com.github.dev7dev:V2ray-Android:1.0.0'|implementation files('libs/libv2ray.aar')|" app/build.gradle
         
     - name: Set up JDK 17
